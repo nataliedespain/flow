@@ -1,29 +1,32 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 import colors from '../../styles/colors';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const HabitsHeader = ({ toggleForm, formToggled }) => {
+const HabitHeader = ({ name, toggleForm, formToggled }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerLeft}>
         <Text style={styles.headerFont}>
-          Habits
+          {name}
         </Text>
       </View>
-      <TouchableHighlight onPress={() => toggleForm()} underlayColor="white">
+      <TouchableHighlight
+        underlayColor="white"
+        onPress={() => toggleForm()}
+      >
         <View style={styles.headerRight}>
           <Text style={[styles.headerFont, styles.headerRightFont]}>
             {formToggled ?
               <Icon
-                name="minus-circle"
-                size={30}
-                color={colors.blue}
+                name="more-vert"
+                size={40}
+                color={colors.gray}
               /> :
               <Icon
-                name="plus-circle"
-                size={30}
-                color={colors.blue}
+                name="more-horiz"
+                size={40}
+                color={colors.gray}
               />
             }
           </Text>
@@ -35,7 +38,7 @@ const HabitsHeader = ({ toggleForm, formToggled }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    minHeight: 65,
+    maxHeight: 65,
     margin: 15,
     marginBottom: 0,
     paddingTop: 10,
@@ -56,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HabitsHeader;
+export default HabitHeader;

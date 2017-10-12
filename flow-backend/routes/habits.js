@@ -18,7 +18,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   knex('habits').insert(req.body).then(() => {
     knex('habits').select().then(habits => res.json(habits));
-  })
+  });
 });
 
 module.exports = router;

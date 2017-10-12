@@ -8,21 +8,22 @@ import { connect } from 'react-redux';
 import * as datesActions from '../../actions/habitsDates';
 
 import SectionHeader from '../common/SectionHeader';
-import Habit from './Habit';
+import HabitListItem from './HabitListItem';
 
-const HabitSectionContainer = ({ time, color, habits, done, getHabitStreak, fetching }) => {
+const HabitSectionContainer = ({ time, color, habits, isDoneToday, getHabitStreak, fetching, navigate }) => {
   return (
     <View>
       <SectionHeader text={time} />
       { fetching ? null :
       <View style={styles.sectionContainer}>
         {habits.map(habit => (
-          <Habit
+          <HabitListItem
             key={habit.id}
             color={color}
-            name={habit.name}
-            done={done}
+            habit={habit}
+            done={isDoneToday(habit.id)}
             streak={getHabitStreak(habit.id)}
+            navigate={navigate}
           />
         ))}
       </View>

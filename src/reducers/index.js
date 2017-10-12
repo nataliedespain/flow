@@ -3,14 +3,14 @@ import nav from './nav';
 import login from './login';
 import habitsDates from './habitsDates';
 import habits from './habits';
-import toggleNewHabit from './toggleNewHabit';
+import toggle from './toggle';
 
 const rootReducer = combineReducers({
   nav,
   login,
   habitsDates,
   habits,
-  toggleNewHabit
+  toggle
 });
 
 export default rootReducer;

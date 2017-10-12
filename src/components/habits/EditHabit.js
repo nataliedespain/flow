@@ -10,10 +10,10 @@ import * as habitsActions from '../../actions/habits';
 
 import SectionHeader from '../common/SectionHeader';
 
-const NewHabit = (props) => {
+const EditHabit = (props) => {
   return (
     <View style={styles.newFormContainer}>
-      <SectionHeader text="Add a Habit" noMargin />
+      <SectionHeader text="Edit Habit" noMargin />
       <TextInput
         style={styles.newInput}
         placeholder="Habit"
@@ -63,7 +63,7 @@ const NewHabit = (props) => {
             time: props.habits.time,
             user_id: 'mrjztrr7AoQgIN6cxabjDZ3GWJV2'
           });
-          props.toggle.toggleNewHabit();
+          props.toggle.toggleEditHabit();
           props.habitsActions.nameInput('');
           props.habitsActions.timeInput(1);
         }}
@@ -133,4 +133,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NewHabit);
+)(EditHabit);

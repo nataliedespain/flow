@@ -7,8 +7,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as datesActions from '../../actions/habitsDates';
 import * as habitsActions from '../../actions/habits';
-import * as toggle from '../../actions/toggleNewHabit';
+import * as toggle from '../../actions/toggle';
 
+import LoadingScreen from '../common/LoadingScreen';
 import HabitsHeader from './HabitsHeader';
 import NewHabit from './NewHabit';
 import HabitSectionContainer from './HabitSectionContainer';
@@ -38,20 +39,13 @@ class Habits extends React.Component {
       .filter(date => date.habit_id === id)
       .map(date => this.dateParse(date.date));
     if (dates.includes(moment().subtract(1, 'days').format('YYYY-MM-DD')) === false) return 0;
-    let count = 0;
+    let count = 1;
     let i = 2;
     while (dates.includes(moment().subtract(i, 'days').format('YYYY-MM-DD'))) {
       count += 1;
       i += 1;
     }
     return count;
-  }
-  isDoneTodayByTime = (time) => {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
-    const habits = this.props.habits.data.filter(habit => habit.user_id === uid);
-    const done = habits.filter(habit => (habit.time === time) && this.isDoneToday(habit.id)).length;
-    const count = habits.filter(habit => habit.time === time).length;
-    return done === count;
   }
   isDoneToday = (id) => {
     const done = this.props.dates.data
@@ -63,34 +57,41 @@ class Habits extends React.Component {
     return date.substring(0, date.indexOf('T'));
   }
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <HabitsHeader toggleForm={this.props.toggle.toggleNewHabit} />
+        <HabitsHeader
+          toggleForm={this.props.toggle.toggleNewHabit}
+          formToggled={this.props.formToggled}
+        />
         {this.props.formToggled ? <NewHabit /> : null}
-        {this.props.habits.isFetching ? null : <View>
+        {this.props.habits.isFetching ? <LoadingScreen /> : <View>
           <HabitSectionContainer
             time="Morning"
             color={colors.red}
             habits={this.getHabitsByTime(1)}
-            done={this.isDoneTodayByTime(1)}
+            isDoneToday={this.isDoneToday}
             fetching={this.props.habits.isFetching}
             getHabitStreak={this.getHabitStreak}
+            navigate={navigate}
           />
           <HabitSectionContainer
             time="Afternoon"
             color={colors.yellow}
             habits={this.getHabitsByTime(2)}
-            done={this.isDoneTodayByTime(2)}
+            isDoneToday={this.isDoneToday}
             fetching={this.props.habits.isFetching}
             getHabitStreak={this.getHabitStreak}
+            navigate={navigate}
           />
           <HabitSectionContainer
             time="Night"
             color={colors.green}
             habits={this.getHabitsByTime(3)}
-            done={this.isDoneTodayByTime(3)}
+            isDoneToday={this.isDoneToday}
             fetching={this.props.habits.isFetching}
             getHabitStreak={this.getHabitStreak}
+            navigate={navigate}
           />
         </View>}
       </ScrollView>
@@ -109,7 +110,7 @@ const mapStateToProps = (state) => {
   return {
     dates: state.habitsDates,
     habits: state.habits,
-    formToggled: state.toggleNewHabit
+    formToggled: state.toggle.toggleNew
   };
 };
 
