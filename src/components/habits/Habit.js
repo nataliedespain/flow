@@ -3,7 +3,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Habit = ({ color, name, done }) => {
+const Habit = ({ color, name, done, streak }) => {
+  const streakText = () => {
+    if (streak === 1) {
+      return `${streak} day in a row`;
+    } else if (streak === 0) {
+      return 'No streak';
+    } else {
+      return `${streak} days in a row`;
+    }
+  }
   return (
     <View style={[styles.sectionItem, { borderLeftColor: color }]}>
       <View
@@ -11,7 +20,7 @@ const Habit = ({ color, name, done }) => {
       />
       <View style={styles.habitTextContainer}>
         <Text style={styles.topText}>{name}</Text>
-        <Text style={styles.bottomText}>Bottom Text</Text>
+        <Text style={styles.bottomText}>{streakText()}</Text>
       </View>
       <View style={styles.rightArrow}>
         <Icon

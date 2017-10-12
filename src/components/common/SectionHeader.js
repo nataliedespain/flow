@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const SectionHeader = ({ text }) => {
+const SectionHeader = ({ text, noMargin }) => {
   return (
-    <View style={styles.header}>
+    <View style={noMargin ? [styles.header, { marginTop: 0 }] : styles.header}>
       <Text style={styles.headerText}>{text}</Text>
     </View>
   );

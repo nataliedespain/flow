@@ -19,4 +19,10 @@ router.get('/:uid', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+  knex('habits_dates').insert(req.body).then(() => {
+    knex('habits_dates').select().then(dates => res.json(dates));
+  });
+});
+
 module.exports = router;

@@ -34,9 +34,9 @@ class Dashboard extends React.Component {
     const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
     const dates = [];
     for (let i = 1; i < 8; i += 1) {
-      const day = moment().subtract(i, 'days')._d;
+      const day = moment().subtract(i, 'days').format('YYYY-MM-DD');
       dates.push({
-        percent: this.findDailyPercent(uid, moment(day).format('YYYY-MM-DD')),
+        percent: this.findDailyPercent(uid, day),
         day: moment(day).format('ddd')
       });
     }
@@ -77,14 +77,16 @@ class Dashboard extends React.Component {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <Header />
-        {this.props.habits.isFetching ? null : <View>
+        {this.props.habits.isFetching ? null :
+        <View>
           <SectionHeader text="Today's Goal" />
           <ProgressCircle fill={this.findDailyPercent('mrjztrr7AoQgIN6cxabjDZ3GWJV2', moment().format('YYYY-MM-DD'))} />
           <SectionHeader text="Past Week" />
           <PastWeek getPastWeek={this.getPastWeek} />
           <SectionHeader text="Today's Progress" />
           <Today progress={this.getDailyProgress()} />
-        </View>}
+        </View>
+        }
       </ScrollView>
     );
   }

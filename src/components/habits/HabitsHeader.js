@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 import colors from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -7,7 +7,7 @@ import moment from 'moment';
 import Moment from 'react-moment';
 import 'moment-timezone';
 
-const HabitsHeader = () => {
+const HabitsHeader = ({ toggleForm }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerLeft}>
@@ -15,15 +15,17 @@ const HabitsHeader = () => {
           Habits
         </Text>
       </View>
-      <View style={styles.headerRight}>
-        <Text style={[styles.headerFont, styles.headerRightFont]}>
-          <Icon
-            name="plus-circle"
-            size={30}
-            color={colors.blue}
-          />
-        </Text>
-      </View>
+      <TouchableHighlight onPress={() => toggleForm()} underlayColor="white">
+        <View style={styles.headerRight}>
+          <Text style={[styles.headerFont, styles.headerRightFont]}>
+            <Icon
+              name="plus-circle"
+              size={30}
+              color={colors.blue}
+            />
+          </Text>
+        </View>
+      </TouchableHighlight>
     </View>
   );
 };

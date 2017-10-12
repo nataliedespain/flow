@@ -10,7 +10,7 @@ const Navigator = StackNavigator({
   // Home: { screen: HomeScreen },
   // Login: { screen: Login },
   // LoginFail: { screen: LoginFail },
-  Dashboard: { screen: Dashboard },
+  // Dashboard: { screen: Dashboard },
   Habits: { screen: Habits }
 });
 
