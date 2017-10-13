@@ -14,6 +14,20 @@ export const timeInput = (time) => {
   };
 };
 
+export const editNameInput = (name) => {
+  return {
+    type: 'EDIT_NAME_INPUT',
+    payload: name
+  };
+};
+
+export const editTimeInput = (time) => {
+  return {
+    type: 'EDIT_TIME_INPUT',
+    payload: time
+  };
+};
+
 export const getHabits = () => {
   return {
     type: 'GET_HABITS',
@@ -28,9 +42,9 @@ export const newHabit = (data) => {
   };
 };
 
-// export const getHabit = (id) => {
-//   return {
-//     type: 'GET_HABIT',
-//     payload: axios.get(`http://localhost:3000/habits/${id}`)
-//   };
-// };
+export const editHabit = (id, data) => {
+  return {
+    type: 'EDIT_HABIT',
+    payload: axios.patch(`http://localhost:3000/habits/${id}`, data)
+  };
+};

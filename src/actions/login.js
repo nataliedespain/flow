@@ -14,15 +14,13 @@ export const pwInput = (pw) => {
   };
 };
 
-export const login = (email, pw, nav) => {
+export const login = (email, pw) => {
   return {
     type: 'LOGIN',
     payload: firebase.auth()
       .signInWithEmailAndPassword(email, pw)
       .then((user) => {
-        // this.setState({ error: '', loading: false });
         console.log('auth', user);
-        nav.navigate('Dashboard');
         return {
           email: user.email,
           uid: user.uid

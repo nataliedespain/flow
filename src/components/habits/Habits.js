@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, Button, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import colors from '../../styles/colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -15,24 +16,23 @@ import NewHabit from './NewHabit';
 import HabitSectionContainer from './HabitSectionContainer';
 
 class Habits extends React.Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: 'Flow',
     headerStyle: {
       backgroundColor: 'white',
     },
     headerTitleStyle: {
       fontSize: 20
-    }
-  });
+    },
+    headerLeft: <TouchableOpacity onPress={() => navigation.goBack()}><Text>&nbsp;&nbsp;<Icon marginLeft={15} name="angle-left" size={35} color={colors.gray} /></Text></TouchableOpacity>
+  })
   componentDidMount() {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
-    this.props.datesActions.getDates(uid);
+    this.props.datesActions.getDates(this.props.login.uid);
     this.props.habitsActions.getHabits();
   }
   getHabitsByTime = (time) => {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
     return this.props.habits.data
-      .filter(habit => habit.user_id === uid && habit.time === time);
+      .filter(habit => habit.user_id === this.props.login.uid && habit.time === time);
   }
   getHabitStreak = (id) => {
     const dates = this.props.dates.data
@@ -110,7 +110,8 @@ const mapStateToProps = (state) => {
   return {
     dates: state.habitsDates,
     habits: state.habits,
-    formToggled: state.toggle.toggleNew
+    formToggled: state.toggle.toggleNew,
+    login: state.login
   };
 };
 

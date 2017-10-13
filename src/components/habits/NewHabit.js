@@ -61,7 +61,7 @@ const NewHabit = (props) => {
           props.habitsActions.newHabit({
             name: props.habits.name,
             time: props.habits.time,
-            user_id: 'mrjztrr7AoQgIN6cxabjDZ3GWJV2'
+            user_id: props.login.uid
           });
           props.toggle.toggleNewHabit();
           props.habitsActions.nameInput('');
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     habits: state.habits,
+    login: state.login
   };
 };
 

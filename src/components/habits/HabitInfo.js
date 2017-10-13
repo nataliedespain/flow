@@ -21,7 +21,7 @@ const HabitInfo = ({ streak, habit }) => {
       </View>
       <View>
         <Text style={styles.headerRightFont}>
-          {streak}!
+          {streak}
         </Text>
       </View>
     </View>

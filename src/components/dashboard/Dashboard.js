@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, View, Button, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import moment from 'moment';
+import colors from '../../styles/colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,8 +18,8 @@ import Today from './Today';
 class Dashboard extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Flow',
-    headerLeft: <Text>*</Text>,
-    headerRight: <Button title="Habits" onPress={() => navigation.navigate('Habits')} />,
+    headerLeft: null,
+    headerRight: <TouchableOpacity onPress={() => navigation.navigate('Habits')}><Text><Icon marginLeft={15} name="angle-right" size={35} color={colors.gray} />&nbsp;&nbsp;</Text></TouchableOpacity>,
     headerStyle: {
       backgroundColor: 'white',
     },
@@ -26,25 +28,23 @@ class Dashboard extends React.Component {
     }
   });
   componentDidMount() {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
-    this.props.datesActions.getDates(uid);
     this.props.habitsActions.getHabits();
+    this.props.datesActions.getDates(this.props.login.uid);
   }
   getPastWeek = () => {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
     const dates = [];
     for (let i = 1; i < 8; i += 1) {
       const day = moment().subtract(i, 'days').format('YYYY-MM-DD');
       dates.push({
-        percent: this.findDailyPercent(uid, day),
-        day: moment(day).format('ddd')
+        percent: this.getDailyPercent(day),
+        day: moment(day).format('ddd'),
+        date: day,
       });
     }
     return dates.reverse();
   }
   getDailyProgress = () => {
-    const uid = 'mrjztrr7AoQgIN6cxabjDZ3GWJV2';
-    const habits = this.props.habits.data.filter(habit => habit.user_id === uid);
+    const habits = this.props.habits.data.filter(habit => habit.user_id === this.props.login.uid);
     const morning = {
       done: habits.filter(habit => (habit.time === 1) && this.isDoneToday(habit.id)).length,
       count: habits.filter(habit => habit.time === 1).length
@@ -59,9 +59,14 @@ class Dashboard extends React.Component {
     };
     return { morning, afternoon, night };
   }
-  findDailyPercent = (uid, day) => {
+  getDailyDone = (day) => {
+    return this.props.dates.data.filter(date => this.dateParse(date.date) === day).length;
+  }
+  getDailyPercent = (day) => {
     const dates = this.props.dates.data.filter(date => this.dateParse(date.date) === day).length;
-    const habits = this.props.habits.data.filter(habit => habit.user_id === uid).length;
+    const habits = this.props.habits.data.filter((habit) => {
+      return habit.user_id === this.props.login.uid;
+    }).length;
     return Math.round((dates / habits) * 100);
   }
   dateParse = (date) => {
@@ -80,9 +85,9 @@ class Dashboard extends React.Component {
         {this.props.habits.isFetching ? null :
         <View>
           <SectionHeader text="Today's Goal" />
-          <ProgressCircle fill={this.findDailyPercent('mrjztrr7AoQgIN6cxabjDZ3GWJV2', moment().format('YYYY-MM-DD'))} />
+          <ProgressCircle fill={this.getDailyPercent(moment().format('YYYY-MM-DD'))} />
           <SectionHeader text="Past Week" />
-          <PastWeek getPastWeek={this.getPastWeek} />
+          <PastWeek getPastWeek={this.getPastWeek} getDailyDone={this.getDailyDone} />
           <SectionHeader text="Today's Progress" />
           <Today progress={this.getDailyProgress()} />
         </View>
@@ -95,6 +100,10 @@ class Dashboard extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white'
+  },
+  headerStyle: {
+    marginLeft: 15,
+    marginRight: 15
   }
 });
 
@@ -102,14 +111,14 @@ const mapStateToProps = (state) => {
   return {
     dates: state.habitsDates,
     habits: state.habits,
-    dailyPercent: state.dashboard
+    login: state.login
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     datesActions: bindActionCreators(datesActions, dispatch),
-    habitsActions: bindActionCreators(habitsActions, dispatch),
+    habitsActions: bindActionCreators(habitsActions, dispatch)
   };
 };
 

@@ -30,6 +30,7 @@
     "react-moment": "^0.6.5",
     "react-native": "^0.48.4",
     "react-native-animatable": "^1.2.4",
+    "react-native-calendars": "^1.7.1",
     "react-native-circular-progress": "0.0.8",
     "react-native-modal-picker": "0.0.16",
     "react-native-picker": "^4.2.0",

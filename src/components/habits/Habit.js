@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import colors from '../../styles/colors';
 import moment from 'moment';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Calendar } from 'react-native-calendars';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,8 +18,34 @@ import SectionHeader from '../common/SectionHeader';
 import HabitPastWeek from './HabitPastWeek';
 
 class Habit extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Flow',
+    headerStyle: {
+      backgroundColor: 'white',
+    },
+    headerTitleStyle: {
+      fontSize: 20
+    },
+    headerLeft: <TouchableOpacity onPress={() => navigation.goBack()}><Text>&nbsp;&nbsp;<Icon marginLeft={15} name="angle-left" size={35} color={colors.gray} /></Text></TouchableOpacity>
+  })
+  getThisMonth = (id) => {
+    const thisMonth = {};
+    const dates = this.props.dates.data
+      .filter(date => date.habit_id === id)
+      .map(date => this.dateParse(date.date));
+    const today = moment().format('DD');
+    for (let i = 0; i <= Number(today); i += 1) {
+      const day = moment().subtract(i, 'days').format('YYYY-MM-DD');
+      if (moment().format('YYYY-MM-DD') === day) {
+        thisMonth[day] = { selected: true, marked: true };
+      } else if (dates.includes(day)) {
+        thisMonth[day] = { selected: true };
+      }
+    }
+    return thisMonth;
+  }
+  getHabit = (id) => {
+    return this.props.habits.data.filter(habit => habit.id === id)[0];
   }
   getPastWeek = () => {
     const { state } = this.props.navigation;
@@ -43,17 +71,30 @@ class Habit extends React.Component {
   render() {
     const { state } = this.props.navigation;
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <HabitHeader
-          name={state.params.name}
+          name={this.getHabit(state.params.habit.id).name}
           toggleForm={this.props.toggle.toggleEditHabit}
           formToggled={this.props.formToggled}
         />
-        {this.props.formToggled ? <EditHabit /> : null}
-        <HabitInfo streak={state.params.streak} habit={state.params.habit} />
+        {this.props.formToggled ? <EditHabit habit={this.getHabit(state.params.habit.id)} /> : null}
+        <HabitInfo streak={state.params.streak} habit={this.getHabit(state.params.habit.id)} />
         <SectionHeader text="Past Week" />
         <HabitPastWeek getPastWeek={this.getPastWeek} />
-      </View>
+        <SectionHeader text="This Month" />
+        <View style={styles.calendarContainer}>
+          <Calendar
+            markedDates={this.getThisMonth(state.params.habit.id)}
+            theme={{
+              selectedDayBackgroundColor: colors.blue,
+              textMonthFontFamily: 'Helvetica',
+              textDayHeaderFontFamily: 'Helvetica',
+            }}
+            hideArrows
+            disableMonthChange
+          />
+        </View>
+    </ScrollView>
     );
   }
 }
@@ -61,7 +102,11 @@ class Habit extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1
+    paddingBottom: 25
+  },
+  calendarContainer: {
+    paddingRight: '5%',
+    paddingLeft: '5%',
   }
 });
 

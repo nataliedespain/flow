@@ -3,7 +3,13 @@ import { Button } from 'react-native';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Welcome'
+    title: 'Flow',
+    headerStyle: {
+      backgroundColor: 'white',
+    },
+    headerTitleStyle: {
+      fontSize: 20
+    }
   };
   render() {
     const { navigate } = this.props.navigation;

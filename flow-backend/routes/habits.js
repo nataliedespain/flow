@@ -21,4 +21,10 @@ router.post('/', (req, res) => {
   });
 });
 
+router.patch('/:id', (req, res) => {
+  knex('habits').update(req.body).where('id', req.params.id).then(() => {
+    knex('habits').select().then(habits => res.json(habits));
+  });
+});
+
 module.exports = router;

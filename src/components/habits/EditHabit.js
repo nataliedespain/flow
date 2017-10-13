@@ -10,70 +10,73 @@ import * as habitsActions from '../../actions/habits';
 
 import SectionHeader from '../common/SectionHeader';
 
-const EditHabit = (props) => {
-  return (
-    <View style={styles.newFormContainer}>
-      <SectionHeader text="Edit Habit" noMargin />
-      <TextInput
-        style={styles.newInput}
-        placeholder="Habit"
-        value={props.habits.name}
-        onChangeText={props.habitsActions.nameInput}
-      />
-      <View style={[styles.radioContainer, { marginTop: 15 }]}>
-        <RadioButton
-          currentValue={props.habits.time}
-          value={1}
-          onPress={e => props.habitsActions.timeInput(e)}
-          outerCircleColor={colors.gray}
-          innerCircleColor={colors.blue}
-          innerCircleSize={20}
-        >
-          <Text style={styles.radioText}>Morning</Text>
-        </RadioButton>
-      </View>
-      <View style={styles.radioContainer}>
-        <RadioButton
-          currentValue={props.habits.time}
-          value={2}
-          onPress={e => props.habitsActions.timeInput(e)}
-          outerCircleColor={colors.gray}
-          innerCircleColor={colors.blue}
-          innerCircleSize={20}
-        >
-          <Text style={styles.radioText}>Afternoon</Text>
-        </RadioButton>
-      </View>
-      <View style={styles.radioContainer}>
-        <RadioButton
-          currentValue={props.habits.time}
-          value={3}
-          onPress={e => props.habitsActions.timeInput(e)}
-          outerCircleColor={colors.gray}
-          innerCircleColor={colors.blue}
-          innerCircleSize={20}
-        >
-          <Text style={styles.radioText}>Night</Text>
-        </RadioButton>
-      </View>
-      <TouchableOpacity
-        onPress={() => {
-          props.habitsActions.newHabit({
-            name: props.habits.name,
-            time: props.habits.time,
-            user_id: 'mrjztrr7AoQgIN6cxabjDZ3GWJV2'
-          });
-          props.toggle.toggleEditHabit();
-          props.habitsActions.nameInput('');
-          props.habitsActions.timeInput(1);
-        }}
-      >
-        <View style={styles.newButton}>
-          <Text style={styles.newButtonText}>Submit</Text>
+class EditHabit extends React.Component {
+  componentDidMount() {
+    this.props.habitsActions.editNameInput(this.props.habit.name);
+    this.props.habitsActions.editTimeInput(this.props.habit.time);
+  }
+  render() {
+    return (
+      <View style={styles.newFormContainer}>
+        <SectionHeader text="Edit Habit" noMargin />
+        <TextInput
+          style={styles.newInput}
+          placeholder="Habit"
+          value={this.props.habits.editName}
+          onChangeText={this.props.habitsActions.editNameInput}
+        />
+        <View style={[styles.radioContainer, { marginTop: 15 }]}>
+          <RadioButton
+            currentValue={this.props.habits.editTime}
+            value={1}
+            onPress={e => this.props.habitsActions.editTimeInput(e)}
+            outerCircleColor={colors.gray}
+            innerCircleColor={colors.blue}
+            innerCircleSize={20}
+          >
+            <Text style={styles.radioText}>Morning</Text>
+          </RadioButton>
         </View>
-      </TouchableOpacity>
-    </View>
-  );
+        <View style={styles.radioContainer}>
+          <RadioButton
+            currentValue={this.props.habits.editTime}
+            value={2}
+            onPress={e => this.props.habitsActions.editTimeInput(e)}
+            outerCircleColor={colors.gray}
+            innerCircleColor={colors.blue}
+            innerCircleSize={20}
+          >
+            <Text style={styles.radioText}>Afternoon</Text>
+          </RadioButton>
+        </View>
+        <View style={styles.radioContainer}>
+          <RadioButton
+            currentValue={this.props.habits.editTime}
+            value={3}
+            onPress={e => this.props.habitsActions.editTimeInput(e)}
+            outerCircleColor={colors.gray}
+            innerCircleColor={colors.blue}
+            innerCircleSize={20}
+          >
+            <Text style={styles.radioText}>Night</Text>
+          </RadioButton>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.habitsActions.editHabit(this.props.habit.id, {
+              name: this.props.habits.editName,
+              time: this.props.habits.editTime
+            });
+            this.props.toggle.toggleEditHabit();
+          }}
+        >
+          <View style={styles.newButton}>
+            <Text style={styles.newButtonText}>Submit</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

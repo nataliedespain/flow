@@ -9,9 +9,9 @@ import Habit from './components/habits/Habit';
 
 const Navigator = StackNavigator({
   // Home: { screen: HomeScreen },
-  // Login: { screen: Login },
-  // LoginFail: { screen: LoginFail },
-  // Dashboard: { screen: Dashboard },
+  Login: { screen: Login },
+  LoginFail: { screen: LoginFail },
+  Dashboard: { screen: Dashboard },
   Habits: { screen: Habits },
   Habit: {
     path: 'habits/:name',

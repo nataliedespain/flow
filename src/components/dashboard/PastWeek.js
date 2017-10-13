@@ -3,12 +3,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 import * as Animatable from 'react-native-animatable';
 
-const PastWeek = ({ getPastWeek }) => {
+const PastWeek = ({ getPastWeek, getDailyDone }) => {
   return (
     <View style={styles.weekContainer}>
       {
         getPastWeek().map(data => (
           <View key={data.day} style={styles.dayContainer}>
+            <Text style={styles.number}>
+              {console.log(data)}
+              {getDailyDone(data.date)}
+            </Text>
             <Animatable.View
               animation={{
                 from: { height: 0 },
@@ -26,7 +30,7 @@ const PastWeek = ({ getPastWeek }) => {
 
 const styles = StyleSheet.create({
   weekContainer: {
-    minHeight: 100,
+    minHeight: 110,
     backgroundColor: colors.lightgray,
     padding: 15,
     flex: 1,
@@ -47,6 +51,12 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     fontWeight: '500',
     fontSize: 11
+  },
+  number: {
+    fontSize: 11,
+    color: colors.gray,
+    fontWeight: '500',
+    paddingBottom: 5
   }
 });
 
